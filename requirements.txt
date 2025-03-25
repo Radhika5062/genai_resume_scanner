@@ -1,0 +1,11 @@
+streamlit
+fitz
+PyPDF2
+langchain
+langchain_community
+pypdf
+langchain_huggingface 
+huggingface_hub
+python-dotenv
+langchain-ollama
+.
