@@ -8,4 +8,6 @@ langchain_huggingface
 huggingface_hub
 python-dotenv
 langchain-ollama
+groq
+langchain-groq
 .

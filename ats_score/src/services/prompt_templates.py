@@ -5,51 +5,86 @@ class CreatePrompt:
         pass
 
     def get_job_alignment_prompt(self, job_description, resume_text):
-        prompt = f"""
+        prompt =  prompt = f"""
+
+            Give me answer in the below steps
+
             Ensure that you only evaluate the resume text with respect to the job description provided.
             You are a highly skilled resume reviewer with 20 years of experience in talent acquisition in fields of Data Science, Machine Learning, Deep Learning and Generative AI.
-            Your task is to evaluate whether the candidate's resume aligns with the provided job descriotion in these domains. 
-
+            Your task is to evaluate whether the candidate's resume aligns with the provided job descriotion in these domains.
             Your review should follow these steps:
+
             ### Step 1: Job resume alignement scoring
+            - This section should first include a percentage in bold and then from next line the description should follow.
             - Analyse the job description andResume provided below.
             - Calculate a percentage match score based on:
                 -  Technical skill match: Check for alignment with required tools, coding languages and techniques.
                 - Relevant experience: Does the candidate have the required experience for the job role?
                 - Keywords: Does the resume include necessary technical and domain-specifig keywords?
-                - Problem solving approach: Is the candidate familiar with problem solving techniques used in this domain like data wrangling, feature engineering, model evaluation? There are a lot of other problem solving techniques and I have only included a few examples. 
+                - Problem solving approach: Is the candidate familiar with problem solving techniques used in this domain like data wrangling, feature engineering, model evaluation? There are a lot of other problem solving techniques and I have only included a few examples.
                 - Provide the match percentage (0% - 100%) that reflects how well the resume aligns with the job description.
-
             
             ### Step 2: Resume sections analysis
             - Break down the analysis into key sections of the resume.
                 - Experience: Analyse how the candidate's previous work experience aligns with the given job description. Does the candidate have experience with machine learning models, data pipelines or AI systems?
-                - Skills: Check for the presence of relevant programming languages, tools and frameworks such as but not limited to Python, R, Tensorflow, Pytorch, SQL, Hadoop, spark, Keras, scikit learn, nlp. Check for the skills which are mentioned in the job description and compare it with resume. 
-                - Education: Evaluate whether the candidate's educational background is relevant. For example degree in computer science, Mathematics, statistics, AI related fields. Also check if the educational background of the candidate can bring domain knowledge. 
+                - Skills: Check for the presence of relevant programming languages, tools and frameworks such as but not limited to Python, R, Tensorflow, Pytorch, SQL, Hadoop, spark, Keras, scikit learn, nlp. Check for the skills which are mentioned in the job description and compare it with resume.
+                - Education: Evaluate whether the candidate's educational background is relevant. For example degree in computer science, Mathematics, statistics, AI related fields. Also check if the educational background of the candidate can bring domain knowledge.
                 - Certifications: Suggest whether the candidate has relevant certifications in areas such as Data Science, Machine Learning, Deep learning, Generative AI. Check for certifications from renouned bodies like Google AI, AWS certified machine learning engineer, Coursera, Udacity certifications.
             
-                ### Step 3: Suggestions for improvement
+            ### Step 3: Suggestions for improvement
                 - Provide actionable tips to improve the alignment of the resume with the job description:
                     - Missing skills: Recommend any technical skills that the candidate should add. For example, specific frameworks or tools.
                     - Missing experience: Suggest how better candidate can highlight their relevant experience with examples for example AI projects, model deployment, data analysis.
                     - Actionable improvements for each section: For example, if the job requires Tensorflow and resume only mentions Keras, recommend updating the experience section to include Tensorflow experience as well.
-
-                
-                ### Step 4: Keyword suggestions
-                - Suggest relevant keywords from the job description and common terms that one should include in resume from these fields. Some examples (you can add whatever is relevant to the job description and domain) 
+                - Highlight the skills that that the candidate lacks or is not mentioned in resume which is mentioned in job description.
+            
+            ### Step 4: Keyword suggestions
+                - Suggest relevant keywords from the job description and common terms that one should include in resume from these fields. Some examples (you can add whatever is relevant to the job description and domain)
                     - Machine Learning: Model Optimization, Hyperparameter Tuning, feature selection, feature engineering, cross validation, Exploratory Data Analysis (EDA)
                     - Deep learning: neural network, CNN, GAN, Transfer learning
                     - Data Science: Statistical modelling, Exploratory Data Analysis (EDA), A/B testing
                     - Generative AI: Transformer model, LLM
+                - You do not need to suggest all these keywords as is. Analyse the job description and resume and then check which of these keywords would be relevant or what other keywords apart from this would be relevant and suggest those keywords only. Suggest only 5-7 keywords and at max 10 if highly important ones are missing.
+            
+            ### Step 5: Feedback:
+                - Give a summary of your analysis, including whether a candidate is a good fit for the job and any final recommendations. Make this professional, constructive and friendly. This feedback should be encouraging and motivating. Talk about domain knowledge and domain expertise of the candidate with respect to job description.
+            
+            ### Step 6: What to expect in interview?
+                - Give 5 interview questions that the candidate can expect on the basis of tools, skills and experience required in the job description. 
+            
+            ### In the output, do not mention step numbers. Just give the step headings. 
 
-               
-                ### Feedback:
-                - Give a summary of your analysis, including whether a candidate is a good fit for the job and any final recommendations. Make this professional, constructive and friendly. This feedback should be encouraging and motivating. Talk about domain knowledge and domain expertise of the candidate with respect to job description. 
-
-                ### Job description
+            ### Job description
                 {job_description}
-
-                ### Resume
+            
+            ### Resume
                 {resume_text}
         """
         return prompt
+    
+    def get_score_prompt(self, job_description, resume_text):
+        prompt = f"""
+
+                Ensure that you only evaluate the resume text with respect to the job description provided.
+                You are a highly skilled resume reviewer with 20 years of experience in talent acquisition in fields of Data Science, Machine Learning, Deep Learning and Generative AI.
+                Your task is to evaluate whether the candidate's resume aligns with the provided job descriotion in aforementioned domains.
+
+
+                - Only give one score to show the percentage match on the basis of below criterion
+                - Analyse the job description and Resume provided below.
+                - Calculate a percentage match score based on:
+                    -  Technical skill match: Check for alignment with required tools, coding languages and techniques.
+                    - Relevant experience: Does the candidate have the required experience for the job role?
+                    - Keywords: Does the resume include necessary technical and domain-specifig keywords?
+                    - Problem solving approach: Is the candidate familiar with problem solving techniques used in this domain like data wrangling, feature engineering, model evaluation? There are a lot of other problem solving techniques and I have only included a few examples.
+                    - Provide the match percentage (0% - 100%) that reflects how well the resume aligns with the job description.
+            
+            
+            ### Job description
+                {job_description}
+            
+            ### Resume
+                {resume_text}
+            """
+        return prompt
+    
