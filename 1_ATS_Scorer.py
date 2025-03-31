@@ -24,11 +24,27 @@ resume_file = st.file_uploader("Add Resume (PDF Only)", "pdf")
 
 upload_button = st.button('Upload', 'pdfButton')
 
+role_options = st.selectbox(
+    "For which domain are you analysing the resume for?",
+    ("Machine Learning Engineer", "Generative AI Engineer", "Data Scientist", "Customer Support",
+     "Technical Support Engineer", "Software developer", "Product Manager", "Account Executive", "Marketing"),
+     index = None,
+     placeholder="Select the role"
+)
+
+def choose_prompt(role, resume_text, job_description):
+    cp = CreatePrompt()
+    if role in ("Data Science", "Artificial Intelligence", "Machine Learning", "Generative AI"):
+        prompt = cp.get_job_alignment_prompt(job_description, resume_text)
+    else:
+        prompt = cp.get_job_alignment_prompt_any_field(job_description, resume_text, role)
+    return prompt
+        
 
 def main():
     try:
         logging.info("Entered the main function")
-        if upload_button:
+        if role_options:
             if resume_file is not None:
                 fh = FileHandler(resume_file)
                 tmp_file = fh.create_temp_file()
@@ -36,15 +52,13 @@ def main():
                 gtfp = GetTextFromPdf(tmp_file)
                 resume_text = gtfp.read_text_from_pdf()
                 logging.info("Resume text extracted")
-                cp = CreatePrompt()
-                full_prompt = cp.get_job_alignment_prompt(job_description_text, resume_text)
-                score_prompt = cp.get_score_prompt(job_description_text, resume_text)
+                prompt = choose_prompt(role=role_options, resume_text=resume_text, job_description=job_description_text)
                 m = Model()
                 llm = m.llm_model()
                 ollama_llm = m.ollama_llm_model()
                 groq_llm = m.groq_llm_model()
                 logging.info("Model created")
-                score_response = groq_llm.invoke(full_prompt)
+                score_response = groq_llm.invoke(prompt)
                 logging.info("Runnable invoked")
                 st.write(score_response.content)
                 logging.info("Response written")

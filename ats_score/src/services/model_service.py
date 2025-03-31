@@ -40,6 +40,3 @@ class Model:
                         max_tokens=MAX_LENGTH
                       )
         return llm
-
-
-
