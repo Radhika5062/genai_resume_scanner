@@ -17,7 +17,7 @@ class CreatePrompt:
             Your review should follow these steps:
 
             ### Step 1: Job resume alignement scoring
-            - This section should first include a percentage in bold and then from next line the description should follow.
+            - This section should first include a percentage in bold and then from next line the description should follow. 
             - Analyse the job description andResume provided below.
             - Calculate a percentage match score based on:
                 - Technical skill match: Check for alignment with required tools, coding languages and techniques.
@@ -54,7 +54,7 @@ class CreatePrompt:
                 - Suggest replacing gendered language or ensuring neutral phrasing in descriptions.
                 
 
-            ### Step 6: Keyword suggestions
+            ### Step 6: Missing Keyword
                 - Suggest relevant keywords from the job description and common terms that one should include in resume from these fields. Some examples (you can add whatever is relevant to the job description and role)
                     - Machine Learning: Model Optimization, Hyperparameter Tuning, feature selection, feature engineering, cross validation, Exploratory Data Analysis (EDA)
                     - Deep learning: neural network, CNN, GAN, Transfer learning
@@ -68,7 +68,14 @@ class CreatePrompt:
             ### Step 8: What to expect in interview?
                 - Give 5 interview questions that the candidate can expect on the basis of tools, skills and experience required in the job description. 
             
-            ### Step 9: Write an email to the candidate giving summary of their strengths and weaknesses with respect to the job description. Suggest them some improvements as per your analyses. Make this professional, constructive and friendly. This feedback should be encouraging and motivating. Don't forget to mention that the suggestions that you are making should be added to your resume if you hold the skill otherwise the approach should be to first learn the skill and then write in resume. Be polite. 
+            ### Step 9: Write an email to the candidate giving summary of their strengths and weaknesses in skills only with respect to the job description. Suggest them some improvements as per your analysis. 
+                - Do not suggest keywords that need to be added in the resume. That is just for internal purpose only.
+                - Make this professional, constructive and friendly. 
+                - This feedback should be encouraging and motivating. 
+                - Don't forget to mention that the suggestions that you are making should be added to your resume if you hold the skill otherwise the approach should be to first learn the skill and then write in resume. 
+                - Be polite. 
+                - Email should not be too lengthy.
+                - Include 3 interview questions that the candidate can expect during interview. This should be on the basis of candidate's resume and job description.
         
             
             ### In the output, do not mention step numbers. Just give the step headings. 
@@ -80,6 +87,12 @@ class CreatePrompt:
                 {resume_text}
         """
         return prompt
+    
+    def get_similar_role_names(self, role):
+        role_names = f'''
+            Give 5 job role names/position titles/designations similar to {role}.
+        '''
+        return role_names
     
     def get_job_alignment_prompt_any_field(self, job_description, resume_text, role):
         logging.info("Entered get_job_alignment_prompt_any_field")
@@ -129,7 +142,7 @@ class CreatePrompt:
                 - Suggest improvements in resume structure if any.
                 - Suggest replacing gendered language or ensuring neutral phrasing in descriptions.
             
-            ### Step 6: Keyword suggestions
+            ### Step 6: Missing Keyword
                 - Suggest relevant keywords from the job description and common terms that one should include in resume from {role} fields. Some examples (you can add whatever is relevant to the job description and role)
                     - Machine Learning: Model Optimization, Hyperparameter Tuning, feature selection, feature engineering, cross validation, Exploratory Data Analysis (EDA)
                     - Deep learning: neural network, CNN, GAN, Transfer learning
@@ -140,10 +153,18 @@ class CreatePrompt:
             ### Step 7: Feedback:
                 - Give a summary of your analysis, including whether a candidate is a good fit for the job and any final recommendations. Make this professional, constructive and friendly. This feedback should be encouraging and motivating. Talk about role knowledge and role expertise of the candidate with respect to job description.
             
-            ### Step 8: What to expect in interview?
-                - Give 5 interview questions that the candidate can expect on the basis of tools, skills and experience required in the job description. 
+            ### Step 8: Questions that can be asked in interview?
+                - On the basis of resume at hand and the job description provided, suggest me 5 interview questions that can be asked to candidate. 
             
-            ### Step 9: Write an email to the candidate giving summary of their strengths and weaknesses with respect to the job description. Suggest them some improvements as per your analyses. Make this professional, constructive and friendly. This feedback should be encouraging and motivating. Don't forget to mention that the suggestions that you are making should be added to your resume if you hold the skill otherwise the approach should be to first learn the skill and then write in resume. Be polite. 
+            ### Step 9: Write an email to the candidate giving summary of their strengths and weaknesses in skills only with respect to the job description. Suggest them some improvements as per your analysis. 
+                - Do not suggest keywords that need to be added in the resume. That is just for internal purpose only.
+                - Make this professional, constructive and friendly. 
+                - This feedback should be encouraging and motivating. 
+                - Don't forget to mention that the suggestions that you are making should be added to your resume if you hold the skill otherwise the approach should be to first learn the skill and then write in resume. 
+                - Be polite. 
+                - Email should not be too lengthy.
+                - Include 3 interview questions that the candidate can expect during interview. This should be on the basis of candidate's resume and job description. 
+                
             
             ### In the output, do not mention step numbers. Just give the step headings. 
 
